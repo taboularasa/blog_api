@@ -47,6 +47,12 @@ class PostsController < ApplicationController
     head :no_content
   end
 
+  def validate
+    post = Post.new(validation_params)
+    post.valid?
+    render json: { errors: post.errors }, status: 200
+  end
+
   private
 
     def set_post
@@ -55,5 +61,9 @@ class PostsController < ApplicationController
 
     def post_params
       params.require(:post).permit(:title, :body)
+    end
+
+    def validation_params
+      JSON.parse params[:post]
     end
 end
